@@ -47,7 +47,7 @@ namespace VideoCollector
             {
                 DownFile downFile = new DownFile(fileName, fileUrl, this);
                 downloadFileList.Add(fileName, downFile);
-                downFile.startDownload();
+                downFile.StartDownload();
             }
         }
 

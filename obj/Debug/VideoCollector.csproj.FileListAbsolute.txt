@@ -1,0 +1,8 @@
+D:\GitHub\VideoCollector\bin\Debug\VideoCollector.exe.config
+D:\GitHub\VideoCollector\bin\Debug\VideoCollector.exe
+D:\GitHub\VideoCollector\bin\Debug\VideoCollector.pdb
+D:\GitHub\VideoCollector\obj\Debug\VideoCollector.CollectorForm.resources
+D:\GitHub\VideoCollector\obj\Debug\VideoCollector.Properties.Resources.resources
+D:\GitHub\VideoCollector\obj\Debug\VideoCollector.csproj.GenerateResource.Cache
+D:\GitHub\VideoCollector\obj\Debug\VideoCollector.exe
+D:\GitHub\VideoCollector\obj\Debug\VideoCollector.pdb
