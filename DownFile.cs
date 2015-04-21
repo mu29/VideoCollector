@@ -57,6 +57,7 @@ namespace VideoCollector
             mForm.BeginInvoke((MethodInvoker)delegate
             {
                 mForm.Log(mName + " 다운로드 완료");
+                mForm.downloadNext();
             });
         }
     }

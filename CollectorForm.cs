@@ -13,14 +13,16 @@ namespace VideoCollector
 {
     public partial class CollectorForm : Form
     {
-        Dictionary<String, DownFile> downloadFileList = new Dictionary<String, DownFile>();
+        private Dictionary<String, DownFile> downloadFileList = new Dictionary<String, DownFile>();
+        private ArrayList urlList = new ArrayList();
+        private String currentUrl = "";
 
         public CollectorForm()
         {
             InitializeComponent();
         }
 
-        private String GetString(char separator, String identifier, String text)
+        private String GetElement(char separator, String identifier, String text, int index = 1)
         {
             String[] candidate = text.Split(separator);
             String value = "";
@@ -29,8 +31,24 @@ namespace VideoCollector
             {
                 if (candidate[i].Contains(identifier))
                 {
-                    value = candidate[i + 1];
+                    value = candidate[i + index];
                     break;
+                }
+            }
+
+            return value;
+        }
+
+        private ArrayList GetElements(char separator, String identifier, String text, int index = 1)
+        {
+            String[] candidate = text.Split(separator);
+            ArrayList value = new ArrayList();
+
+            for (int i = 0; i < candidate.Length; i++)
+            {
+                if (candidate[i].Contains(identifier))
+                {
+                    value.Add(candidate[i + index]);
                 }
             }
 
@@ -40,14 +58,28 @@ namespace VideoCollector
         private void StartSeek()
         {
             HtmlDocument doc = mWebBrowser.Document;
-            String fileName = GetString('>', "video_title", doc.Body.InnerHtml).Replace("</DIV", "");
-            String fileUrl = GetString('\'', "hq_video_file", doc.Body.InnerHtml);
+            String fileName = GetElement('>', "video_title", doc.Body.InnerHtml).Replace("</DIV", "");
+            String fileUrl = GetElement('\'', "hq_video_file", doc.Body.InnerHtml);
 
             if (!downloadFileList.ContainsKey(fileName))
             {
                 DownFile downFile = new DownFile(fileName, fileUrl, this);
                 downloadFileList.Add(fileName, downFile);
                 downFile.StartDownload();
+            }
+        }
+
+        public void downloadNext()
+        {
+            urlList.Remove(currentUrl);
+            if (urlList.Count > 0)
+            {
+                mWebBrowser.Navigate((String)urlList[0]);
+                currentUrl = (String)urlList[0];
+            }
+            else
+            {
+                textLog.AppendText("다운로드 완료.");
             }
         }
 
@@ -66,7 +98,17 @@ namespace VideoCollector
 
         private void mWebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            StartSeek();
+            if (mWebBrowser.Url.AbsolutePath.Contains("all_time"))
+            {
+                HtmlDocument doc = mWebBrowser.Document;
+                urlList = GetElements('\"', "title truncatedtitle", doc.Body.InnerHtml, 4);
+                mWebBrowser.Navigate((String) urlList[0]);
+                currentUrl = (String) urlList[0];
+            }
+            else
+            {
+                StartSeek();
+            }
         }
     }
 }
