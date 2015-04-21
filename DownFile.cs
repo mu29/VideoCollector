@@ -49,6 +49,10 @@ namespace VideoCollector
         void DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             mPercentage = (int)(e.BytesReceived * 100 / e.TotalBytesToReceive);
+            mForm.BeginInvoke((MethodInvoker)delegate
+            {
+                mForm.ChangeProgress(mPercentage);
+            });
         }
 
         void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -57,7 +61,7 @@ namespace VideoCollector
             mForm.BeginInvoke((MethodInvoker)delegate
             {
                 mForm.Log(mName + " 다운로드 완료");
-                mForm.downloadNext();
+                mForm.DownloadNext();
             });
         }
     }

@@ -63,15 +63,17 @@ namespace VideoCollector
 
             if (!downloadFileList.ContainsKey(fileName))
             {
+                mProgressBarCurrent.Value = 0;
                 DownFile downFile = new DownFile(fileName, fileUrl, this);
                 downloadFileList.Add(fileName, downFile);
                 downFile.StartDownload();
             }
         }
 
-        public void downloadNext()
+        public void DownloadNext()
         {
             urlList.Remove(currentUrl);
+            mProgressBarAll.Value += 1;
             if (urlList.Count > 0)
             {
                 mWebBrowser.Navigate((String)urlList[0]);
@@ -88,6 +90,11 @@ namespace VideoCollector
             textLog.AppendText(text + "\r\n");
         }
 
+        public void ChangeProgress(int value)
+        {
+            mProgressBarCurrent.Value = value;
+        }
+
         private void btnCollect_Click(object sender, EventArgs e)
         {
             if (textUrl.Text != "")
@@ -102,6 +109,7 @@ namespace VideoCollector
             {
                 HtmlDocument doc = mWebBrowser.Document;
                 urlList = GetElements('\"', "title truncatedtitle", doc.Body.InnerHtml, 4);
+                mProgressBarAll.Maximum = urlList.Count;
                 mWebBrowser.Navigate((String) urlList[0]);
                 currentUrl = (String) urlList[0];
             }
