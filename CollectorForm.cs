@@ -60,7 +60,7 @@ namespace VideoCollector
         }
 
         // 긁어오기 시작
-        private void StartSeek()
+        private void StartDownload()
         {
             try
             {
@@ -153,7 +153,7 @@ namespace VideoCollector
                 }
 
                 // 목록 불러오기가 끝났다면 영상 다운로드
-                StartSeek();
+                StartDownload();
             }
             catch { }
         }
