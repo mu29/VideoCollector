@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Collections;
+using System.IO;
 
 namespace VideoCollector
 {
@@ -67,6 +68,14 @@ namespace VideoCollector
                 String document = mWebBrowser.Document.Body.InnerHtml;
                 String fileName = GetElement('>', "video_title", document).Replace("</DIV", "");
                 String fileUrl = GetElement('\'', "hq_video_file", document);
+
+                // 파일이 존재하면 다음 파일로 넘어가자
+                if (File.Exists(@"./" + fileName))
+                {
+                    Log("[완료] " + fileName);
+                    DownloadNext();
+                    return;
+                }
 
                 // 파일이 있다면 다운로드
                 if (!downloadFileList.ContainsKey(fileName) && fileName != "")
